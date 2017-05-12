@@ -24,3 +24,11 @@ script:
   - 'docker exec --tty ${container_id} env TERM=xterm test -x /usr/local/bin/terraform'
 
   - 'docker exec --tty ${container_id} env TERM=xterm terraform --version'
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    rooms:
+      secure: gza5INuNQyYWJLSjamzxadWuA7Np3WNxPOCuDd92hzPyepiIXpkCmVOnahTJmNCnJoZeCqym0MmaodRog/VZWqMwovG4yAqRBuRe/zwBAfuqA4FLmFm+O4ZBy9uRIeR8dK3rR7IesQRqDd09LEPXYZZtPBtLluQ/MbJm/2h8G9wN8Mm0EE4J+VPyQ5BiQvO6HTze3GEezZjgPTWjJ/dfmb1sIZbUWaab3r1wbxrxHp3SulhHBevHuPNFh/fsQP6nRpJOweQOpsttzQpKFdayfl5rD0Za95ezQskGkDMqILL88DeqP5+9a7Ipt5h0YUHC4jmDNvzMaSJW0IRuBB5X2Y0hplb1QaaECcuNVM1lxZ83nPMGD+hhFOwLHwWPLvDbfRMIX0Ahmtnqd6tKUERH8JkxfdA2MKi+/VNEEoaUeFNAv6r9b+3nUVWYnWyZDeWjjplXAA2GhXVIHaJ8kRpU1zStApmlaR1OdcT5KliK8yCx2ibzQ56mAEMgBKwk/KZcWPFyxiZfBAEeMlrrOcR6AwHWWqfBTJU4fgtCz6EKb85NmaKy2FbsYyk3JxGFmHFLxjE556Em/fLBMrMVQLnO9zPcXjGHO6XnCXB4v9xaLZwXI/a3pKxiNCWJ9ri+PAMCopXOWtisUQXv8b3IOlN2165YBkmYaPxVjweVFm9zJd0=
+    on_success: change
+    on_failure: always
