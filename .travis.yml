@@ -1,0 +1,26 @@
+---
+services: docker
+
+env:
+  - distro: centos7
+  - distro: fedora24
+  - distro: debian8
+  - distro: ubuntu1604
+
+script:
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+  # Ensure Terraform is installed and at the right version.
+  - 'docker exec --tty ${container_id} env TERM=xterm which terraform'
+  - 'docker exec --tty ${container_id} env TERM=xterm test -x /usr/local/bin/terraform'
+
+  - 'docker exec --tty ${container_id} env TERM=xterm terraform --version'

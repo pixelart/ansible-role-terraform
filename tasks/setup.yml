@@ -1,0 +1,49 @@
+---
+- name: Get Terraform version if installed
+  shell: "terraform --version | grep '^Terraform' | cut -d' ' -f2 | sed -e 's/^v//'"
+  register: _terraform_installed_version
+  changed_when: false
+  failed_when: false
+
+- name: Extract installed version variable
+  set_fact:
+    terraform_installed_version: "{{ _terraform_installed_version.stdout }}"
+  when: _terraform_installed_version.rc == 0
+
+- name: Set decision to install Terraform
+  set_fact:
+    terraform_install: "{{ terraform_installed_version is not defined or terraform_installed_version != terraform_version }}"
+
+- name: Download package checksums
+  uri:
+    url: "{{ terraform_checksum_url }}"
+    return_content: true
+  changed_when: false
+  register: terraform_package_checksums
+  when: terraform_install
+
+- name: Extract package checksum
+  set_fact:
+    terraform_package_checksum: "{{ (item.split(' '))[0] }}"
+  with_items: "{{ terraform_package_checksums.content.split('\n') }}"
+  when: terraform_install and terraform_package in item
+
+- name: Download Terraform package
+  get_url:
+    url: "{{ terraform_download_url }}/{{ terraform_package }}"
+    dest: /tmp/
+    checksum: "sha256:{{ terraform_package_checksum }}"
+  register: terraform_download_package
+  when: terraform_install
+
+- name: Extract Terraform package
+  unarchive:
+    src: "/tmp/{{ terraform_package }}"
+    dest: "{{ terraform_install_path }}"
+    remote_src: yes
+  when: terraform_install
+
+- name: Delete package file
+  file:
+    dest: "/tmp/{{ terraform_package }}"
+    state: absent

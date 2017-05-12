@@ -1,0 +1,51 @@
+galaxy_info:
+  author: pixelart
+  description: Install Hashicorp's Terraform
+  company: pixelart GmbH
+
+  license: MIT
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: EL
+      versions:
+      - all
+    - name: GenericUNIX
+      versions:
+      - all
+    - name: Fedora
+      versions:
+      - all
+    - name: opensuse
+      versions:
+      - all
+    - name: OpenBSD
+      versions:
+      - all
+    - name: FreeBSD
+      versions:
+      - all
+    - name: Ubuntu
+      versions:
+      - all
+    - name: SLES
+      versions:
+      - all
+    - name: GenericLinux
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+    - name: Solaris
+      versions:
+      - all
+    - name: MacOSX
+      versions:
+      - all
+
+  galaxy_tags:
+    - terraform
+    - devops
+    - cloud

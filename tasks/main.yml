@@ -1,0 +1,24 @@
+---
+- name: Harmonize architecture to amd64
+  set_fact:
+    terraform_architecture: amd64
+  when: "ansible_architecture == 'x86_64'"
+
+- name: Harmonize architecture to 386
+  set_fact:
+    terraform_architecture: 386
+  when: "ansible_architecture == 'i386'"
+
+- name: Harmonize architecture to arm
+  set_fact:
+    terraform_architecture: arm
+  when: "'arm' in ansible_architecture"
+
+- name: Define terraform_package.
+  set_fact:
+    terraform_package: "terraform_{{ terraform_version }}_{{ ansible_system|lower }}_{{ terraform_architecture }}.zip"
+  when: terraform_package is not defined
+
+# Setup/install tasks.
+- include: setup.yml
+  static: no
